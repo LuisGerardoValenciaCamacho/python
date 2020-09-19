@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mi formulario</title>
+	<script>
+		function limpiarForm()
+		{
+			document.getElementById("nombre").value="";
+			document.getElementById("apellidos").value="";
+			document.getElementById("fechaNacimiento").value="";
+			document.getElementById("masculino").checked=true;
+			document.getElementById("femenino").checked=false;
+		}
+
+		function validaMensaje(mensaje)
+		{
+			if(mensaje != null && mensaje != 'null' && mensaje != "")
+			{
+				alert(mensaje);
+			}
+		}
+
+		function validarCrearUsuario()
+		{
+			var nombres = document.getElementById("nombre").value;
+			var apellidos = document.getElementById("apellidos").value;
+			var fechaNacimiento = document.getElementById("fechaNacimiento").value;
+			if(nombres == '')
+			{
+				alert("El campo 'Nombres' es requerido")
+				return;
+			}
+			if(apellidos == '')
+			{
+				alert("El campo 'Apellidos' es requerido")
+				return;
+			}
+			if(fechaNacimiento == '')
+			{
+				alert("El campo 'Fecha de nacimiento' es requerido")
+				return;
+			}
+			alert("Usuario guardado")
+			document.getElementById("formularioUsuarios").submit();
+		}
+
+		function borrarUsuario(id, nombre, apellido)
+		{
+			var res = confirm("¿Seguro de borrar el usuario '" + nombre + " " + apellido + "?");
+			if(res == true)
+			{
+				document.getElementById("idUsuario").value = id;
+				document.getElementById("formularioUsuarios").action = "borrar-usuario";
+				document.getElementById("formularioUsuarios").submit();
+			}
+		}
+	</script>
+</head>
+<body>
+	<h1> Hola mi nombre es: {{nombre}} </h1>
+	<h2> La fecha del día de hoy es: {{fecha}} </h2>
+	<hr/>
+	<fieldset>
+		<legend> Información del usuario</legend>
+		<form action="/Usuarios" method="POST" id="formularioUsuarios">
+			<input type="hidden" id="idUsuario" name="idUsuario"/>
+			<table width="100%" style="text-align: center">
+				<tr>
+					<td colspan="3" height="15px"></td>
+				</tr>
+				<tr>
+					<td>
+						<label for="nombre"> Nombres: </label>
+						<input type="text" id="nombre" name="nombre" size="30" maxlength="30	"/>
+					</td>
+					<td>
+						<label for="apellidos"> Apellidos: </label>
+						<input type="text" id="apellidos" name="apellidos" size="30" maxlength="30"/>
+					</td>
+					<td>
+						<label for="fechaNacimiento"> Fecha de nacimiento: </label>
+						<input type="date" id="fechaNacimiento" name="fechaNacimiento" size="30" maxlength="30"/>
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" height="15px"></td>
+				</tr>
+
+				<tr>
+					<td align="left" style="padding-left: 100px;">
+						<label> <strong> Genero: </strong></label> <br/>
+						<input type="radio" id="masculino" name="genero" value="Masculino" checked="checked">
+						<label for="masculino"> Masculino</label>
+						<br/>
+
+						<input type="radio" id="femenino" name="genero" value="Femenino">
+						<label for="masculino"> Femenino</label>
+						<br/>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td colspan="3">
+						<input type="button" value="Limpiar" onclick="limpiarForm()">
+						<input type="button" value="Crear" onclick="validarCrearUsuario()">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</fieldset>
+	<br/> <br/>
+	<fieldset>
+		<legend>Usuarios registrados</legend>
+		<table width = "100%" style = "text-align: left">
+			<tr style="color: green" >
+				<th><font size = 4>Nombre</font></th>
+				<th><font size = 4>Apellidos</font></th>
+				<th><font size = 4>Fecha de nacimiento</font></th>
+				<th><font size = 4>Genero</font></th>
+				<th><font size = 4>Acción</font></th>
+			</tr>
+			{% for contact in contacts %}
+				<tr>
+					<td> {{contact.1}} </td>
+					<td> {{contact.2}} </td>
+					<td> {{contact.3}} </td>
+					<td> {{contact.4}} </td>
+					<td> <a href="/borrar-usuario/{{contact.0}}"> Borrar </a> </td>
+				</tr>
+			{% endfor %}
+		</table>
+	</fieldset>
+	<!-- <script src="funciones.js" type="text/javascript">  </script> -->
+</body>
+</html>
